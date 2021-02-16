@@ -1,0 +1,97 @@
+#mainContainer {
+	max-width: 800px;
+	margin: auto;
+	margin-bottom: 100px;
+
+	> .loginContainer {
+		text-align: center;
+		margin-top: 100px;
+	}
+	> .main {
+		text-align: center;
+		margin-top: 30px;
+
+		.loggedInMessage {
+			font-size: 13px;
+		}
+	}
+	.derby-msg {
+		margin-top: 50px;
+	}
+	.errorMessage {
+		color: red;
+	}
+}
+
+.w-100 {
+	width: 100%;
+}
+
+.submissions-table {
+	margin-top: 50px;
+	margin-bottom: 50px;
+	width: 100%;
+
+	th {
+		&.quiz-select {
+			font-size: 8px;
+			font-weight: normal;
+			cursor: pointer;
+		}
+	}
+
+	td {
+		cursor: pointer;
+
+		&.kerb-select {
+			width: 1%;
+			white-space: nowrap;
+			padding: 2px 6px;
+			text-align: left;
+		}
+		&.submitted {
+			background-color: #0B0;
+		}
+		&.not-submitted {
+			background-color: #DDD;
+		}
+	}
+}
+
+.plain-table {
+	margin-top: 50px;
+	margin-bottom: 50px;
+	margin-left: auto;
+	margin-right: auto;
+
+	th {
+		padding: 2px 10px;
+	}
+
+	td {
+		padding: 2px 15px;
+		&.row-label {
+			text-align: left;
+			font-weight: bold;
+		}
+		&.score {
+		}
+	}
+}
+
+.main-nav {
+	display: flex;
+	padding: 0px 150px;
+	margin-top: 20px;
+
+	> a {
+		flex-grow: 1;
+		text-decoration: none;
+		font-weight: bold;
+		color: blue;
+	}
+}
+
+b, th {
+	color: #444;
+}
