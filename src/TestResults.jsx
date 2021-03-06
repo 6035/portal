@@ -167,11 +167,13 @@ class TestResults extends React.Component {
 
 		const dbDom = [];
 		for (const row of this.props.testResults) {
+			const commitStr = row['git_commit'].slice(0, 6);
 			const scoreText = formatScore(row['testset'], row['score']);
 			dbDom.push(<tr
 				key={row['id']}
 			>
 				<td>{row['repo_name']}</td>
+				<td>{commitStr}</td>
 				<td>{row['testset']}</td>
 				<td>{scoreText}</td>
 				<td>{formatTimestamp(row['time_processed'])}</td>
@@ -186,6 +188,7 @@ class TestResults extends React.Component {
 				<thead>
 					<tr>
 						<th>Repo</th>
+						<th>Commit</th>
 						<th>Testset</th>
 						<th>Score</th>
 						<th>Time processed</th>
