@@ -33,7 +33,8 @@ class Main extends React.Component {
 			},
 			quizFiles: [],
 			numMiniquizzes: null,
-			reposInQueue: null,
+			testsQueueCurrent: null,
+			testsQueuePending: null,
 			navIndex: navIndex,
 			phase5Enabled: false,
 			derbyTable: null,
@@ -86,7 +87,8 @@ class Main extends React.Component {
 	};
 	handleWsInQueue = (msg) => {
 		this.setState(produce((state) => {
-			state.reposInQueue = msg['repos'];
+			state.testsQueueCurrent = msg['current'];
+			state.testsQueuePending = msg['pending'];
 		}));
 	};
 	handleWsDerby = (msg) => {
@@ -152,7 +154,8 @@ class Main extends React.Component {
 					allTeams={this.state.allTeams}
 					testResults={this.state.db.test_results}
 					webhooksLog={this.state.db.webhooks_log}
-					reposInQueue={this.state.reposInQueue}
+					testsQueueCurrent={this.state.testsQueueCurrent}
+					testsQueuePending={this.state.testsQueuePending}
 				/> : null
 			}
 			{ (this.state.navIndex == 2) ?

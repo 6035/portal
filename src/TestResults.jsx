@@ -213,18 +213,31 @@ class TestResults extends React.Component {
 			</div>;
 		}
 
-		let reposInQueueListDom = <span>None</span>;
-		if (this.props.reposInQueue != null && this.props.reposInQueue.length > 0) {
-			reposInQueueListDom = [];
-			for (let i = 0; i < this.props.reposInQueue.length; i++) {
+		let testResultsTableDom = <span>None</span>;
+		const testsQueueNonempty =
+			this.props.testsQueuePending != null && (
+				this.props.testsQueueCurrent != null ||
+				this.props.testsQueuePending.length > 0
+			);
+		if (testsQueueNonempty) {
+			const fullQueue = (
+				(this.props.testsQueueCurrent == null) ?
+					[] : [this.props.testsQueueCurrent]
+			).concat(this.props.testsQueuePending);
+			testResultsTableDom = [];
+			for (let i = 0; i < fullQueue.length; i++) {
 				if (i != 0) {
-					reposInQueueListDom.push(<span
+					testResultsTableDom.push(<span
 						key={2*i-1}
 					>, </span>);
 				}
-				reposInQueueListDom.push(<b
+				const entryText =
+					(this.props.testsQueueCurrent != null && i == 0) ?
+					`[${fullQueue[i]}]` :
+					`${fullQueue[i]}`;
+				testResultsTableDom.push(<b
 					key={2*i}
-				>{this.props.reposInQueue[i]}</b>);
+				>{entryText}</b>);
 			}
 		}
 
@@ -233,7 +246,7 @@ class TestResults extends React.Component {
 			{teamsTableDom}
 			{teamTimeUsedDom}
 			<div>
-				Repositories in grading queue: {reposInQueueListDom}
+				Repositories in grading queue: {testResultsTableDom}
 			</div>
 			{dbTableDom}
 		</div>;
