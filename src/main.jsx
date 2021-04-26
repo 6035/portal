@@ -144,6 +144,7 @@ class Main extends React.Component {
 					serverDomain={SERVER_DOMAIN}
 					allKerbs={this.state.allKerbs}
 					quizFiles={this.state.quizFiles}
+					quizSubmissions={this.state.db.quiz_submissions}
 					numMiniquizzes={this.state.numMiniquizzes}
 				/> : null
 			}

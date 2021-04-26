@@ -52,6 +52,12 @@
 		&.submitted {
 			background-color: #0B0;
 		}
+		&.submitted-late {
+			background-color: #BB0;
+		}
+		&.submitted-early {
+			background-color: #B0B;
+		}
 		&.not-submitted {
 			background-color: #DDD;
 		}

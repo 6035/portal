@@ -1,5 +1,36 @@
 import produce from 'immer';
 
+const lecturesStart = new Date(2021, 1, 15, 11).getTime() / 1000;
+const lectureDates = [
+	[0, 2],
+	[0, 3],
+	[0, 4],
+	[2, 0],
+	[2, 1],
+	[2, 2],
+	[2, 3],
+	[2, 4],
+	[3, 1],
+	[3, 2],
+	[3, 3],
+	[5, 2],
+	[5, 3],
+	[6, 0],
+	[6, 2],
+	[8, 0],
+	[8, 1],
+	[8, 2],
+	[8, 3],
+	[9, 2],
+	[9, 3],
+	[9, 4],
+	[10, 0],
+	[10, 1],
+	[10, 2],
+	[10, 3],
+	[10, 4],
+];
+
 class Quizzes extends React.Component {
 	constructor(props) {
 		super(props);
@@ -21,6 +52,23 @@ class Quizzes extends React.Component {
 			const quizNum = parseInt(quizName.slice(2));
 			const rowIndex = this.props.allKerbs.indexOf(fileSpec[0]);
 			table[rowIndex][quizNum].push(fileSpec);
+		}
+		return table;
+	}
+	getQuizSubmissionTable() {
+		const table = [];
+		for (const kerb of this.props.allKerbs) {
+			const row = [];
+			for (let i = 0; i < this.props.numMiniquizzes; i++) {
+				row.push(null);
+			}
+			table.push(row);
+		}
+		for (const entry of this.props.quizSubmissions) {
+			const quizName = entry['quiz_name'];
+			const quizNum = parseInt(quizName.slice(2));
+			const rowIndex = this.props.allKerbs.indexOf(entry['kerb']);
+			table[rowIndex][quizNum] = entry;
 		}
 		return table;
 	}
@@ -52,14 +100,34 @@ class Quizzes extends React.Component {
 	}
 	render() {
 		const quizFilesTable = this.getQuizFilesTable();
+		const quizSubmissionTable = this.getQuizSubmissionTable();
 
 		const tableDom = [];
 		for (const [i, row] of quizFilesTable.entries()) {
 			const kerb = this.props.allKerbs[i];
 			const rowDom = [];
 			for (const [quizNum, cell] of row.entries()) {
-				const cellClass = (cell.length > 0) ?
-					'submitted' : 'not-submitted';
+				const submission = quizSubmissionTable[i][quizNum];
+				let cellClass = 'submitted';
+				if (submission == null) {
+					cellClass = 'not-submitted';
+				}
+				else if (quizNum < lectureDates.length) {
+					const submissionSeconds =
+						submission['time_processed'] - lecturesStart;
+					const submissionDays = submissionSeconds / 60 / 60 / 24;
+					const lectureDate = lectureDates[quizNum];
+					const lectureDays = lectureDate[0] * 7 + lectureDate[1];
+					if (quizNum == 14 && submissionDays < lectureDays - 2) {
+						cellClass = 'submitted-early';
+					}
+					if (quizNum != 14 && submissionDays < lectureDays - 1) {
+						cellClass = 'submitted-early';
+					}
+					if (submissionDays > lectureDays + 2) {
+						cellClass = 'submitted-late';
+					}
+				}
 				rowDom.push(
 					<td
 						key={quizNum}
