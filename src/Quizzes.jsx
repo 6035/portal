@@ -55,7 +55,7 @@ class Quizzes extends React.Component {
 		}
 		return table;
 	}
-	getQuizSubmissionTable() {
+	getSubmissionStatusTable() {
 		const table = [];
 		for (const kerb of this.props.allKerbs) {
 			const row = [];
@@ -68,7 +68,29 @@ class Quizzes extends React.Component {
 			const quizName = entry['quiz_name'];
 			const quizNum = parseInt(quizName.slice(2));
 			const rowIndex = this.props.allKerbs.indexOf(entry['kerb']);
-			table[rowIndex][quizNum] = entry;
+			if (table[rowIndex][quizNum] == 0) {
+				continue;
+			}
+			if (quizNum >= lectureDates.length) {
+				table[rowIndex][quizNum] = -1;
+			}
+			else {
+				table[rowIndex][quizNum] = 0;
+				const submissionSeconds =
+					entry['time_processed'] - lecturesStart;
+				const submissionDays = submissionSeconds / 60 / 60 / 24;
+				const lectureDate = lectureDates[quizNum];
+				const lectureDays = lectureDate[0] * 7 + lectureDate[1];
+				if (quizNum == 14 && submissionDays < lectureDays - 2) {
+					table[rowIndex][quizNum] = -1;
+				}
+				if (quizNum != 14 && submissionDays < lectureDays - 1) {
+					table[rowIndex][quizNum] = -1;
+				}
+				if (submissionDays > lectureDays + 2) {
+					table[rowIndex][quizNum] = 1;
+				}
+			}
 		}
 		return table;
 	}
@@ -100,33 +122,23 @@ class Quizzes extends React.Component {
 	}
 	render() {
 		const quizFilesTable = this.getQuizFilesTable();
-		const quizSubmissionTable = this.getQuizSubmissionTable();
+		const submissionStatusTable = this.getSubmissionStatusTable();
 
 		const tableDom = [];
 		for (const [i, row] of quizFilesTable.entries()) {
 			const kerb = this.props.allKerbs[i];
 			const rowDom = [];
 			for (const [quizNum, cell] of row.entries()) {
-				const submission = quizSubmissionTable[i][quizNum];
-				let cellClass = 'submitted';
-				if (submission == null) {
-					cellClass = 'not-submitted';
+				const submissionStatus = submissionStatusTable[i][quizNum];
+				let cellClass = 'not-submitted';
+				if (submissionStatus == -1) {
+					cellClass = 'submitted-early';
 				}
-				else if (quizNum < lectureDates.length) {
-					const submissionSeconds =
-						submission['time_processed'] - lecturesStart;
-					const submissionDays = submissionSeconds / 60 / 60 / 24;
-					const lectureDate = lectureDates[quizNum];
-					const lectureDays = lectureDate[0] * 7 + lectureDate[1];
-					if (quizNum == 14 && submissionDays < lectureDays - 2) {
-						cellClass = 'submitted-early';
-					}
-					if (quizNum != 14 && submissionDays < lectureDays - 1) {
-						cellClass = 'submitted-early';
-					}
-					if (submissionDays > lectureDays + 2) {
-						cellClass = 'submitted-late';
-					}
+				if (submissionStatus == 0) {
+					cellClass = 'submitted';
+				}
+				if (submissionStatus == 1) {
+					cellClass = 'submitted-late';
 				}
 				rowDom.push(
 					<td
