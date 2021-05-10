@@ -7,6 +7,7 @@ const PHASE1_TEST_NAMES = [
 const TEAM_TEST_NAMES = [
 	'semantics',
 	'codegen',
+	'dataflow',
 	'optimizer',
 	'derby',
 ];
