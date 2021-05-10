@@ -8,7 +8,7 @@ import { DerbyLeaderboard} from './DerbyLeaderboard.jsx';
 
 import './main.scss';
 
-const SERVER_DOMAIN = '6035.krawthekrow.me';
+const SERVER_DOMAIN = '6035-aws.krawthekrow.me';
 
 class Main extends React.Component {
 	constructor(props) {
