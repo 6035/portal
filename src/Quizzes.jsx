@@ -1,5 +1,7 @@
 import produce from 'immer';
 
+// TODO: make this configurable
+
 const lecturesStart = new Date(2021, 1, 15, 11).getTime() / 1000;
 const lectureDates = [
 	[0, 2],
